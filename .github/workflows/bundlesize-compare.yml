@@ -1,5 +1,5 @@
 # .github/workflows/bundlesize-compare.yml
-
+permissions: write-all
 on:
   # this action will error unless run in a pr context
   pull_request:
