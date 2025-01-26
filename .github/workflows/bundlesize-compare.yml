@@ -3,7 +3,10 @@
 on:
   # this action will error unless run in a pr context
   pull_request:
-
+  
+permissions:
+  contents: write
+  
 jobs:
   # Build current and upload main.js.map
   # You may replace this with your own build method. All that
