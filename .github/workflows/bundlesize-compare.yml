@@ -54,11 +54,7 @@ jobs:
     name: 'Compare base & head bundle sizes'
     runs-on: ubuntu-latest
     needs: [build-base, build-head]
-    permissions:
-      pull-requests: write
-      actions: read
-      checks: write
-      contents: read
+    permissions: write-all
     steps:
       - uses: actions/download-artifact@v4
       - uses: twk3/rollup-size-compare-action@v1.1.1
