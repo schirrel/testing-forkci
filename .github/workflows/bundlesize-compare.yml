@@ -3,19 +3,16 @@
 on:
   # this action will error unless run in a pr context
   pull_request:
-  
-permissions:
-  contents: write
-  
+
 jobs:
-  # Build current and upload main.js.map
+  # Build current and upload stats.json
   # You may replace this with your own build method. All that
-  # is required is that the main.js.map be an artifact
+  # is required is that the stats.json be an artifact
   build-head:
     name: 'Build head'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v2
         with:
@@ -24,15 +21,15 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Upload main.js.map
-        uses: actions/upload-artifact@v4
+      - name: Upload stats.json
+        uses: actions/upload-artifact@v3
         with:
           name: head-stats
-          path: ./dist/main.js.map
+          path: ./dist/stats.json
 
-  # Build base for comparison and upload main.js.map
+  # Build base for comparison and upload stats.json
   # You may replace this with your own build method. All that
-  # is required is that the main.js.map be an artifact
+  # is required is that the stats.json be an artifact
   build-base:
     name: 'Build base'
     runs-on: ubuntu-latest
@@ -46,13 +43,13 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Upload main.js.map
-        uses: actions/upload-artifact@v4
+      - name: Upload stats.json
+        uses: actions/upload-artifact@v3
         with:
           name: base-stats
-          path: ./dist/main.js.map
+          path: ./dist/stats.json
 
-  # run the action against the main.js.map files
+  # run the action against the stats.json files
   compare:
     name: 'Compare base & head bundle sizes'
     runs-on: ubuntu-latest
@@ -61,22 +58,11 @@ jobs:
       pull-requests: write
       actions: read
       checks: write
-      contents: read
     steps:
-    - name: Download artifacts 1
-      id: download
-      uses: actions/download-artifact@v4
-      with:
-        path: ${{ github.workspace }}/head-stats
-    - name: Download artifacts 2
-      id: download2
-      uses: actions/download-artifact@v4
-      with:
-        path: ${{ github.workspace }}/base-stats
-    - name: Do something
-      uses: twk3/rollup-size-compare-action@v1.0.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        current-stats-json-path: ./head-stats/main.js.map
-        base-stats-json-path: ./base-stats/main.js.map
+      - uses: actions/download-artifact@v4
+      - uses: twk3/rollup-size-compare-action@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          current-stats-json-path: ./head-stats/stats.json
+          base-stats-json-path: ./base-stats/stats.json
 
