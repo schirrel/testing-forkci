@@ -6,9 +6,9 @@ on:
   pull_request_target:
 
 jobs:
-  # Build current and upload stats.json
+  # Build current and upload main.js.map
   # You may replace this with your own build method. All that
-  # is required is that the stats.json be an artifact
+  # is required is that the main.js.map be an artifact
   build-head:
     name: 'Build head'
     runs-on: ubuntu-latest
@@ -22,15 +22,15 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Upload stats.json
+      - name: Upload main.js.map
         uses: actions/upload-artifact@v3
         with:
           name: head-stats
-          path: ./dist/stats.json
+          path: ./dist/main.js.map
 
-  # Build base for comparison and upload stats.json
+  # Build base for comparison and upload main.js.map
   # You may replace this with your own build method. All that
-  # is required is that the stats.json be an artifact
+  # is required is that the main.js.map be an artifact
   build-base:
     name: 'Build base'
     runs-on: ubuntu-latest
@@ -44,13 +44,13 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Upload stats.json
+      - name: Upload main.js.map
         uses: actions/upload-artifact@v3
         with:
           name: base-stats
-          path: ./dist/stats.json
+          path: ./dist/main.js.map
 
-  # run the action against the stats.json files
+  # run the action against the main.js.map files
   compare:
     name: 'Compare base & head bundle sizes'
     runs-on: ubuntu-latest
@@ -62,5 +62,5 @@ jobs:
       - uses: twk3/rollup-size-compare-action@v1.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          current-stats-json-path: ./head-stats/stats.json
-          base-stats-json-path: ./base-stats/stats.json
+          current-stats-json-path: ./head-stats/main.js.map
+          base-stats-json-path: ./base-stats/main.js.map
