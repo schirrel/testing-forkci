@@ -56,10 +56,13 @@ jobs:
     needs: [build-base, build-head]
     permissions:
       pull-requests: write
+      actions: read
+      checks: write
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - uses: twk3/rollup-size-compare-action@v1.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           current-stats-json-path: ./head-stats/main.js.map
           base-stats-json-path: ./base-stats/main.js.map
+
