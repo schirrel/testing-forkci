@@ -63,11 +63,16 @@ jobs:
       checks: write
       contents: read
     steps:
-    - name: Download artifacts
+    - name: Download artifacts 1
       id: download
       uses: actions/download-artifact@v4
       with:
-        path: ${{ github.workspace }}
+        path: ${{ github.workspace }}/head-stats
+    - name: Download artifacts 2
+      id: download2
+      uses: actions/download-artifact@v4
+      with:
+        path: ${{ github.workspace }}/base-stats
     - name: Do something
       uses: twk3/rollup-size-compare-action@v1.0.0
       with:
