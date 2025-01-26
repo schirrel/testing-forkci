@@ -63,10 +63,15 @@ jobs:
       checks: write
       contents: read
     steps:
-      - uses: actions/download-artifact@v4
-      - uses: twk3/rollup-size-compare-action@v1.0.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          current-stats-json-path: ./head-stats/main.js.map
-          base-stats-json-path: ./base-stats/main.js.map
+    - name: Download artifacts
+      id: download
+      uses: actions/download-artifact@v4
+      with:
+        path: ${{ github.workspace }}
+    - name: Do something
+      uses: twk3/rollup-size-compare-action@v1.0.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        current-stats-json-path: ./head-stats/main.js.map
+        base-stats-json-path: ./base-stats/main.js.map
 
