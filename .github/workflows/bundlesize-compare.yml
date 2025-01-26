@@ -15,7 +15,7 @@ jobs:
     name: 'Build head'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v2
         with:
@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Upload main.js.map
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: head-stats
           path: ./dist/main.js.map
@@ -47,7 +47,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Upload main.js.map
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: base-stats
           path: ./dist/main.js.map
